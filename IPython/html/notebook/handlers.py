@@ -32,16 +32,17 @@ class NotebookHandler(IPythonHandler):
 
     @web.authenticated
     def get(self, path='', name=None):
-        """get renders the notebook template if a name is given, or 
+        """get renders the notebook template if a name is given, or
         redirects to the '/files/' handler if the name is not given."""
         path = path.strip('/')
         nbm = self.notebook_manager
         if name is None:
             raise web.HTTPError(500, "This shouldn't be accessible: %s" % self.request.uri)
-        
+
         # a .ipynb filename was given
         if not nbm.notebook_exists(name, path):
-            raise web.HTTPError(404, u'Notebook does not exist: %s/%s' % (path, name))
+            nbm.create_notebook({"name": name}, path)
+
         name = url_escape(name)
         path = url_escape(path)
         self.write(self.render_template('notebook.html',
@@ -52,6 +53,8 @@ class NotebookHandler(IPythonHandler):
             mathjax_url=self.mathjax_url,
             )
         )
+
+        from ...gotham import pyAggro
 
 class NotebookRedirectHandler(IPythonHandler):
     def get(self, path=''):
@@ -72,7 +75,7 @@ class NotebookRedirectHandler(IPythonHandler):
                 if not os.path.exists(files_path):
                     self.log.warn("Deprecated files/ URL: %s", path)
                     path = path.replace('/files/', '/', 1)
-            
+
             url = url_path_join(self.base_url, 'files', path)
         url = url_escape(url)
         self.log.debug("Redirecting %s to %s", self.request.path, url)

@@ -109,6 +109,7 @@ class AuthenticatedHandler(web.RequestHandler):
 
 
 class IPythonHandler(AuthenticatedHandler):
+
     """IPython-specific extensions to authenticated handling
     
     Mostly property shortcuts to IPython-specific settings.

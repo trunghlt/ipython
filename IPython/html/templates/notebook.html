@@ -1,7 +1,6 @@
 {% extends "page.html" %}
 
-{% block stylesheet %}
-
+{% block stylesheet %} 
 {% if mathjax_url %}
 <script type="text/javascript" src="{{mathjax_url}}?config=TeX-AMS_HTML-full&delayStartupUntil=configured" charset="utf-8"></script>
 {% endif %}
@@ -357,4 +356,12 @@ class="notebook_app"
 <script src="{{ static_url("notebook/js/celltoolbarpresets/rawcell.js") }}" type="text/javascript" charset="utf-8"></script>
 <script src="{{ static_url("notebook/js/celltoolbarpresets/slideshow.js") }}" type="text/javascript" charset="utf-8"></script>
 
+<script>
+// Inject working url to notebook kernel
+$([IPython.events]).bind('status_started.Kernel', function() {
+   kernel = IPython.notebook.kernel;
+   kernel.execute("url = '" + document.URL + "'");
+   kernel.execute("init_gotham2()")
+});
+</script>
 {% endblock %}
