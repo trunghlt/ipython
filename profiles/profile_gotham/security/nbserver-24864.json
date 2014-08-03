@@ -1,0 +1,8 @@
+{
+  "secure": true, 
+  "url": "https://127.0.0.1:8888/", 
+  "hostname": "127.0.0.1", 
+  "base_url": "/", 
+  "notebook_dir": "/Users/thuynh/Palantir/hack-week-2014", 
+  "port": 8888
+}
